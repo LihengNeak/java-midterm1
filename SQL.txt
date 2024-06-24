@@ -1,0 +1,66 @@
+SQL
+
+CREATE DATABASE your_database_name;
+
+USE your_database_name;
+
+CREATE TABLE Product (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    price_per_unit DOUBLE NOT NULL,
+    active_for_sell BOOLEAN NOT NULL
+);
+INSERT INTO Product (name, price_per_unit, active_for_sell) VALUES ('Product A', 10.5, true);
+INSERT INTO Product (name, price_per_unit, active_for_sell) VALUES ('Product B', 20.0, false);
+INSERT INTO Product (name, price_per_unit, active_for_sell) VALUES ('Product C', 15.75, true);
+
+
+XML
+
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.23</version>
+</dependency>
+
+
+JAVA
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class ProductApp {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/your_database_name";
+        String user = "your_username";
+        String password = "your_password";
+
+        try {
+            // Establish the connection
+            Connection connection = DriverManager.getConnection(url, user, password);
+            // Create a statement
+            Statement statement = connection.createStatement();
+            // Execute the query
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Product");
+
+            // Process the result set
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                double pricePerUnit = resultSet.getDouble("price_per_unit");
+                boolean activeForSell = resultSet.getBoolean("active_for_sell");
+
+                System.out.println("ID: " + id + ", Name: " + name + ", Price per Unit: " + pricePerUnit + ", Active for Sell: " + activeForSell);
+            }
+
+            // Close the resources
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
